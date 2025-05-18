@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <limits>
 
 using namespace std;
 
@@ -43,7 +42,7 @@ int minimax(bool isMaximizing) {
     if (result == "tie") return 0;
 
     if (isMaximizing) {
-        int bestScore = numeric_limits<int>::min();
+        int bestScore = -1000;
         for (int i = 0; i < 9; i++) {
             if (board[i] == "-") {
                 board[i] = "O";
@@ -54,7 +53,7 @@ int minimax(bool isMaximizing) {
         }
         return bestScore;
     } else {
-        int bestScore = numeric_limits<int>::max();
+        int bestScore = 1000;
         for (int i = 0; i < 9; i++) {
             if (board[i] == "-") {
                 board[i] = "X";
@@ -69,7 +68,7 @@ int minimax(bool isMaximizing) {
 
 // AI's turn using Minimax
 void aiTurn() {
-    int bestScore = numeric_limits<int>::min();
+    int bestScore = -1000;
     int bestMove = -1;
     for (int i = 0; i < 9; i++) {
         if (board[i] == "-") {
@@ -77,7 +76,7 @@ void aiTurn() {
             int score = minimax(false);
             board[i] = "-";
             if (score > bestScore) {
-                bestScore = score;
+                bestScore = score; 
                 bestMove = i;
             }
         }
@@ -112,27 +111,33 @@ int main() {
     string currentPlayer = "X";
     bool gameOver = false;
 
-    while (!gameOver) {
-        if (currentPlayer == "X") {
-            takeTurn("X");
-        } else {
-            aiTurn();
-        }
+   while (!gameOver) {
+    if (currentPlayer == "X") {
+        takeTurn("X");
+    } else {
+        aiTurn();
+    }
 
-        string result = checkGameOver();
-        if (result == "X") {
-            cout << "Player X wins!" << endl;
-            gameOver = true;
-        } else if (result == "O") {
-            cout << "AI wins!" << endl;
-            gameOver = true;
-        } else if (result == "tie") {
-            cout << "It's a tie!" << endl;
-            gameOver = true;
+    string result = checkGameOver();
+    if (result == "X") {
+        cout << "Player X wins!" << endl;
+        gameOver = true;
+    } else if (result == "O") {
+        cout << "AI wins!" << endl;
+        gameOver = true;
+    } else if (result == "tie") {
+        cout << "It's a tie!" << endl;
+        gameOver = true;
+    } else {
+        // Simplified version of: currentPlayer = (currentPlayer == "X") ? "O" : "X";
+        if (currentPlayer == "X") {
+            currentPlayer = "O";
         } else {
-            currentPlayer = (currentPlayer == "X") ? "O" : "X";
+            currentPlayer = "X";
         }
     }
+}
+
 
     return 0;
 }
